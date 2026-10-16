@@ -1,0 +1,27 @@
+<section class="container secao">
+    <div class="detalhes-produto">
+        <img
+            src="<%= produto.imagem || '/img/sem-imagem.png' %>"
+            alt="<%= produto.nome %>"
+        >
+
+        <div>
+            <span class="categoria"><%= produto.categoria %></span>
+            <h1><%= produto.nome %></h1>
+            <p><%= produto.descricao %></p>
+
+            <h2>
+                <%= produto.preco.toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL'
+                }) %>
+            </h2>
+
+            <p>Estoque: <%= produto.estoque %> unidade(s)</p>
+
+            <a href="/produtos" class="botao botao-secundario">
+                Voltar ao catálogo
+            </a>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,114 @@
+<section class="container secao">
+    <div class="titulo-secao">
+        <span class="etiqueta">PAINEL ADMINISTRATIVO</span>
+        <h1>Gerenciar produtos</h1>
+        <p>Cadastre e organize os itens da Atlas das Artes.</p>
+    </div>
+
+    <form action="/admin/produtos" method="POST" class="formulario">
+        <h2>Cadastrar novo produto</h2>
+
+        <label for="nome">Nome</label>
+        <input id="nome" name="nome" required maxlength="120">
+
+        <label for="descricao">Descrição</label>
+        <textarea id="descricao" name="descricao" required></textarea>
+
+        <label for="preco">Preço (R$)</label>
+        <input id="preco" name="preco" type="number"
+               min="0" step="0.01" required>
+
+        <label for="imagem">URL da imagem</label>
+        <input id="imagem" name="imagem" type="url">
+
+        <label for="estoque">Estoque</label>
+        <input id="estoque" name="estoque" type="number"
+               min="0" step="1" value="0" required>
+
+        <label for="categoria_id">Categoria</label>
+        <select id="categoria_id" name="categoria_id" required>
+            <option value="">Selecione uma categoria</option>
+            <% categorias.forEach(categoria => { %>
+                <option value="<%= categoria.id %>">
+                    <%= categoria.nome %>
+                </option>
+            <% }) %>
+        </select>
+
+        <button class="botao" type="submit">Cadastrar produto</button>
+    </form>
+</section>
+
+<section class="container secao">
+    <h2>Produtos cadastrados</h2>
+
+    <% produtos.forEach(produto => { %>
+        <article class="admin-card">
+            <div>
+                <h3><%= produto.nome %></h3>
+                <p>
+                    <%= produto.preco.toLocaleString('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL'
+                    }) %>
+                    · Estoque: <%= produto.estoque %>
+                </p>
+            </div>
+
+            <details>
+                <summary>Editar produto</summary>
+
+                <form
+                    action="/admin/produtos/<%= produto.id %>/editar"
+                    method="POST"
+                    class="formulario"
+                >
+                    <label>Nome</label>
+                    <input name="nome" value="<%= produto.nome %>"
+                           required maxlength="120">
+
+                    <label>Descrição</label>
+                    <textarea name="descricao" required><%= produto.descricao %></textarea>
+
+                    <label>Preço</label>
+                    <input name="preco" type="number" min="0" step="0.01"
+                           value="<%= produto.preco %>" required>
+
+                    <label>Imagem (URL)</label>
+                    <input name="imagem" type="url"
+                           value="<%= produto.imagem || '' %>">
+
+                    <label>Estoque</label>
+                    <input name="estoque" type="number" min="0" step="1"
+                           value="<%= produto.estoque %>" required>
+
+                    <label>Categoria</label>
+                    <select name="categoria_id" required>
+                        <% categorias.forEach(categoria => { %>
+                            <option
+                                value="<%= categoria.id %>"
+                                <%= categoria.id === produto.categoria_id
+                                    ? 'selected' : '' %>
+                            >
+                                <%= categoria.nome %>
+                            </option>
+                        <% }) %>
+                    </select>
+
+                    <button class="botao" type="submit">Salvar alterações</button>
+                </form>
+            </details>
+
+            <form
+                action="/admin/produtos/<%= produto.id %>/excluir"
+                method="POST"
+                class="form-excluir"
+                onsubmit="return confirm('Deseja excluir este produto?')"
+            >
+                <button type="submit" class="botao botao-perigo">
+                    Excluir
+                </button>
+            </form>
+        </article>
+    <% }) %>
+</section>
