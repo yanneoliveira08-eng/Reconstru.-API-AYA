@@ -51,4 +51,58 @@ test('GET /api/rota-inexistente deve retornar 404', async () => {
     assert.equal(resposta.status, 404);
     assert.ok(resposta.body.erro);
 });
-n
+
+
+test('POST, PUT e DELETE devem executar o CRUD', async () => {
+    const novoProduto = {
+        nome: 'Produto de teste automatizado',
+        descricao: 'Produto criado durante o teste da API.',
+        preco: 25.50,
+        imagem: '',
+        estoque: 4,
+        categoria_id: 1
+    };
+
+    // Cadastrar produto
+    const cadastro = await request(app)
+        .post('/api/produtos')
+        .send(novoProduto);
+
+    assert.equal(cadastro.status, 201);
+
+    const id = cadastro.body.id;
+    assert.ok(id);
+
+    // Consultar produto cadastrado
+    const consulta = await request(app)
+        .get(`/api/produtos/${id}`);
+
+    assert.equal(consulta.status, 200);
+    assert.equal(consulta.body.nome, novoProduto.nome);
+
+    // Atualizar produto
+    const atualizacao = await request(app)
+        .put(`/api/produtos/${id}`)
+        .send({
+            ...novoProduto,
+            nome: 'Produto atualizado',
+            preco: 30
+        });
+
+    assert.equal(atualizacao.status, 200);
+    assert.equal(atualizacao.body.nome, 'Produto atualizado');
+    assert.equal(atualizacao.body.preco, 30);
+
+    // Excluir produto
+    const exclusao = await request(app)
+        .delete(`/api/produtos/${id}`);
+
+    assert.equal(exclusao.status, 200);
+
+    // Confirmar exclusão
+    const consultaFinal = await request(app)
+        .get(`/api/produtos/${id}`);
+
+    assert.equal(consultaFinal.status, 404);
+});
+
