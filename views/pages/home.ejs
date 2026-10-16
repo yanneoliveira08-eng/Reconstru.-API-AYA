@@ -1,0 +1,71 @@
+<section class="hero">
+    <div class="container hero-content">
+        <span class="etiqueta">UM UNIVERSO DE CRIATIVIDADE</span>
+
+        <h1>A arte transforma o mundo.</h1>
+
+        <p>
+            Descubra obras, culturas e materiais para dar vida
+            às suas ideias. Encontre inspiração em cada detalhe.
+        </p>
+
+        <a href="/produtos" class="botao">Explorar catálogo</a>
+    </div>
+</section>
+
+<section class="container secao">
+    <div class="titulo-secao">
+        <span class="etiqueta">NOSSA COLEÇÃO</span>
+        <h2>Descubra novas expressões artísticas</h2>
+        <p>Peças e materiais para apreciar, colecionar e criar.</p>
+    </div>
+
+    <div class="grade-produtos">
+        <% produtos.forEach(produto => { %>
+            <article class="produto-card">
+                <a href="/produtos/<%= produto.id %>">
+                    <img
+                        src="<%= produto.imagem || '/img/sem-imagem.png' %>"
+                        alt="<%= produto.nome %>"
+                        loading="lazy"
+                    >
+                </a>
+
+                <div class="produto-info">
+                    <span class="categoria"><%= produto.categoria %></span>
+                    <h3><%= produto.nome %></h3>
+                    <p><%= produto.descricao %></p>
+                    <strong>
+                        <%= produto.preco.toLocaleString('pt-BR', {
+                            style: 'currency',
+                            currency: 'BRL'
+                        }) %>
+                    </strong>
+
+                    <a
+                        class="botao botao-secundario"
+                        href="/produtos/<%= produto.id %>"
+                    >
+                        Ver detalhes
+                    </a>
+                </div>
+            </article>
+        <% }) %>
+    </div>
+
+    <div class="centralizar">
+        <a href="/produtos" class="botao">Ver todos os produtos</a>
+    </div>
+</section>
+
+<section class="faixa">
+    <div class="container">
+        <span class="etiqueta">CRIE SEM LIMITES</span>
+        <h2>Sua próxima ideia começa aqui.</h2>
+        <p>
+            Tintas, pincéis, telas, argila e ferramentas para
+            transformar a imaginação em arte.
+        </p>
+        <a href="/produtos" class="botao">Encontrar materiais</a>
+    </div>
+</section>
