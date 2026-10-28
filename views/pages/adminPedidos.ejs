@@ -1,0 +1,51 @@
+<section class="secao">
+    <h1>Pedidos recebidos</h1>
+
+    <a href="/admin" class="botao botao-secundario">
+        Voltar ao painel
+    </a>
+
+    <% if (pedidos.length === 0) { %>
+        <p>Nenhum pedido foi realizado ainda.</p>
+    <% } else { %>
+
+        <div class="tabela-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Número</th>
+                        <th>Cliente</th>
+                        <th>E-mail</th>
+                        <th>Data</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <% pedidos.forEach(pedido => { %>
+                        <tr>
+                            <td>#<%= pedido.id %></td>
+                            <td><%= pedido.cliente_nome %></td>
+                            <td><%= pedido.cliente_email %></td>
+                            <td>
+                                <%= pedido.data_pedido %>
+                            </td>
+                            <td>
+                                <%= Number(pedido.total).toLocaleString(
+                                    'pt-BR',
+                                    {
+                                        style: 'currency',
+                                        currency: 'BRL'
+                                    }
+                                ) %>
+                            </td>
+                            <td><%= pedido.status %></td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+
+    <% } %>
+</section>

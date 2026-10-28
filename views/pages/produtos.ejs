@@ -1,3 +1,4 @@
+
 <section class="container secao">
     <div class="titulo-secao">
         <span class="etiqueta">EXPLORE A LOJA</span>
@@ -30,7 +31,10 @@
                 </a>
 
                 <div class="produto-info">
-                    <span class="categoria"><%= produto.categoria %></span>
+                    <span class="categoria">
+                        <%= produto.categoria %>
+                    </span>
+
                     <h2><%= produto.nome %></h2>
                     <p><%= produto.descricao %></p>
 
@@ -47,10 +51,29 @@
                             : 'Produto indisponível' %>
                     </p>
 
-                    <a class="botao botao-secundario"
-                       href="/produtos/<%= produto.id %>">
+                    <a
+                        class="botao botao-secundario"
+                        href="/produtos/<%= produto.id %>"
+                    >
                         Ver detalhes
                     </a>
+
+                    <!-- Formulário para adicionar ao carrinho -->
+                <form
+    action="/carrinho/adicionar/<%= produto.id %>"
+    method="POST"
+>
+    <input
+        type="hidden"
+        name="quantidade"
+        value="1"
+    >
+
+    <button type="submit">
+        🛒 Adicionar ao carrinho
+    </button>
+</form>
+                    <% } %>
                 </div>
             </article>
         <% }) %>
@@ -60,3 +83,4 @@
         Nenhum produto encontrado para essa pesquisa.
     </p>
 </section>
+

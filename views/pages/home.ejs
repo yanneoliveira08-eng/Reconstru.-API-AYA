@@ -1,3 +1,4 @@
+
 <section class="hero">
     <div class="container hero-content">
         <span class="etiqueta">UM UNIVERSO DE CRIATIVIDADE</span>
@@ -32,9 +33,13 @@
                 </a>
 
                 <div class="produto-info">
-                    <span class="categoria"><%= produto.categoria %></span>
+                    <span class="categoria">
+                        <%= produto.categoria %>
+                    </span>
+
                     <h3><%= produto.nome %></h3>
                     <p><%= produto.descricao %></p>
+
                     <strong>
                         <%= produto.preco.toLocaleString('pt-BR', {
                             style: 'currency',
@@ -48,6 +53,24 @@
                     >
                         Ver detalhes
                     </a>
+
+                    <!-- Botão para adicionar o produto ao carrinho -->
+                    <% if (produto.estoque > 0) { %>
+                     <form
+    action="/carrinho/adicionar/<%= produto.id %>"
+    method="POST"
+>
+    <input
+        type="hidden"
+        name="quantidade"
+        value="1"
+    >
+
+    <button type="submit">
+        🛒 Adicionar ao carrinho
+    </button>
+</form>
+                    <% } %>
                 </div>
             </article>
         <% }) %>
@@ -62,10 +85,12 @@
     <div class="container">
         <span class="etiqueta">CRIE SEM LIMITES</span>
         <h2>Sua próxima ideia começa aqui.</h2>
+
         <p>
             Tintas, pincéis, telas, argila e ferramentas para
             transformar a imaginação em arte.
         </p>
+
         <a href="/produtos" class="botao">Encontrar materiais</a>
     </div>
 </section>

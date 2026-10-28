@@ -1,0 +1,46 @@
+<section class="container secao">
+    <div class="titulo-secao">
+        <span class="etiqueta">PEDIDO REGISTRADO</span>
+        <h1>Obrigado pela sua compra!</h1>
+
+        <p>
+            Seu pedido número <strong>#<%= pedido.id %></strong>
+            foi registrado com sucesso.
+        </p>
+    </div>
+
+    <div class="formulario">
+        <h2>Resumo do pedido</h2>
+
+        <p><strong>Cliente:</strong> <%= pedido.cliente %></p>
+        <p><strong>E-mail:</strong> <%= pedido.email %></p>
+        <p><strong>Data:</strong> <%= pedido.data_pedido %></p>
+        <p><strong>Status:</strong> <%= pedido.status %></p>
+
+        <h3>Produtos</h3>
+
+        <% pedido.itens.forEach(item => { %>
+            <div class="item-pedido">
+                <p><strong><%= item.nome %></strong></p>
+                <p>Quantidade: <%= item.quantidade %></p>
+                <p>
+                    Preço unitário:
+                    <%= item.preco_unitario.toLocaleString('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL'
+                    }) %>
+                </p>
+            </div>
+        <% }) %>
+
+        <h2>
+            Total:
+            <%= pedido.total.toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            }) %>
+        </h2>
+    </div>
+
+    <a href="/produtos" class="botao">Continuar explorando</a>
+</section>

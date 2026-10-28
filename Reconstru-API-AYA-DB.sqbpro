@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:/Users/annyr/Downloads/DB.Browser.for.SQLite-v3.13.1-win64\ReconstruAPIAYADB.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="2546"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><table title="produtos" custom_title="0" dock_id="1" table="0,11:Navegáveis"/><dock_state state="000000ff00000000fd0000000100000002000001240000024dfc0100000001fb000000160064006f0063006b00420072006f00770073006500310100000000000001240000012400ffffff000001240000000000000004000000040000000800000008fc00000000"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="SQL 1">CREATE TABLE IF NOT EXISTS categorias (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT NOT NULL UNIQUE,
+    descricao TEXT
+);
+CREATE TABLE IF NOT EXISTS produtos (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT NOT NULL,
+    descricao TEXT NOT NULL,
+    preco REAL NOT NULL CHECK (preco &gt;= 0),
+    imagem TEXT,
+    estoque INTEGER NOT NULL DEFAULT 0 CHECK (estoque &gt;= 0),
+    categoria_id INTEGER NOT NULL,
+    criado_em TEXT DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (categoria_id)
+        REFERENCES categorias(id)
+        ON DELETE RESTRICT
+);
+CREATE TABLE IF NOT EXISTS clientes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT NOT NULL,
+    email TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS pedidos (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    cliente_id INTEGER NOT NULL,
+    data_pedido TEXT DEFAULT CURRENT_TIMESTAMP,
+    total REAL NOT NULL CHECK (total &gt;= 0),
+    status TEXT NOT NULL DEFAULT 'Pendente',
+
+    FOREIGN KEY (cliente_id)
+        REFERENCES clientes(id)
+        ON DELETE RESTRICT
+);
+CREATE TABLE IF NOT EXISTS pedidos (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    cliente_id INTEGER NOT NULL,
+    data_pedido TEXT DEFAULT CURRENT_TIMESTAMP,
+    total REAL NOT NULL CHECK (total &gt;= 0),
+    status TEXT NOT NULL DEFAULT 'Pendente',
+
+    FOREIGN KEY (cliente_id)
+        REFERENCES clientes(id)
+        ON DELETE RESTRICT
+);
+CREATE TABLE IF NOT EXISTS itens_pedido (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    pedido_id INTEGER NOT NULL,
+    produto_id INTEGER NOT NULL,
+    quantidade INTEGER NOT NULL CHECK (quantidade &gt; 0),
+    preco_unitario REAL NOT NULL CHECK (preco_unitario &gt;= 0),
+
+    FOREIGN KEY (pedido_id)
+        REFERENCES pedidos(id)
+        ON DELETE CASCADE,
+
+    FOREIGN KEY (produto_id)
+        REFERENCES produtos(id)
+        ON DELETE RESTRICT,
+
+    UNIQUE (pedido_id, produto_id)
+);</sql><sql name="SQL 2">INSERT OR IGNORE INTO categorias (nome, descricao)
+VALUES
+    ('Quadros e pinturas', 'Obras de arte e pinturas'),
+    ('Esculturas e cerâmicas', 'Peças tridimensionais e cerâmicas'),
+    ('Livros e discos', 'Livros, poemas e discos de vinil'),
+    ('Fotografias e gravuras', 'Fotografias e artes impressas'),
+    ('Artesanato', 'Peças artesanais de diferentes culturas'),
+    ('Materiais artísticos', 'Tintas, pincéis, lápis e telas'),
+    ('Instrumentos musicais', 'Instrumentos para criação musical');
+	
+	INSERT INTO produtos (
+    nome,
+    descricao,
+    preco,
+    imagem,
+    estoque,
+    categoria_id
+)
+VALUES (
+    'Quadro abstrato',
+    'Quadro decorativo para ambientes.',
+    150.00,
+    'quadro.jpg',
+    5,
+    1
+);
+
+INSERT INTO produtos (
+    nome,
+    descricao,
+    preco,
+    imagem,
+    estoque,
+    categoria_id
+)
+VALUES (
+    'Quadro abstrato',
+    'Quadro decorativo para ambientes.',
+    150.00,
+    'quadro.jpg',
+    5,
+    (
+        SELECT id
+        FROM categorias
+        WHERE nome = 'Quadros e pinturas'
+    )
+);
+
+INSERT INTO clientes (nome, email)
+VALUES ('Ana Lima', 'ana@example.com');
+
+INSERT INTO pedidos (cliente_id, total, status)
+VALUES (1, 150.00, 'Pendente');
+
+INSERT INTO itens_pedido (
+    pedido_id,
+    produto_id,
+    quantidade,
+    preco_unitario
+)
+VALUES (1, 1, 1, 150.00);
+
+</sql><sql name="SQL 3">SELECT *
+FROM categorias;
+
+SELECT *
+FROM produtos;
+
+SELECT *
+FROM clientes;
+
+SELECT *
+FROM pedidos;
+
+SELECT *
+FROM itens_pedido;
+
+SELECT nome, preco, estoque
+FROM produtos;
+
+SELECT *
+FROM produtos
+WHERE id = 1;
+
+SELECT nome, preco
+FROM produtos
+WHERE preco &lt; 100;
+
+SELECT nome, estoque
+FROM produtos
+WHERE estoque = 0;
+
+SELECT nome, preco
+FROM produtos
+ORDER BY preco ASC;
+
+SELECT nome, preco
+FROM produtos
+ORDER BY preco DESC;
+
+SELECT *
+FROM produtos
+WHERE nome LIKE '%quadro%';
+
+SELECT
+    produtos.id,
+    produtos.nome AS produto,
+    produtos.preco,
+    produtos.estoque,
+    categorias.nome AS categoria
+FROM produtos
+JOIN categorias
+    ON produtos.categoria_id = categorias.id;
+	
+	SELECT
+    pedidos.id AS pedido,
+    clientes.nome AS cliente,
+    clientes.email,
+    pedidos.data_pedido,
+    pedidos.total,
+    pedidos.status
+FROM pedidos
+JOIN clientes
+    ON pedidos.cliente_id = clientes.id;
+SELECT
+    itens_pedido.pedido_id,
+    produtos.nome AS produto,
+    itens_pedido.quantidade,
+    itens_pedido.preco_unitario,
+    itens_pedido.quantidade * itens_pedido.preco_unitario
+        AS subtotal
+FROM itens_pedido
+JOIN produtos
+    ON itens_pedido.produto_id = produtos.id;
+	
+	SELECT
+    pedidos.id AS pedido,
+    clientes.nome AS cliente,
+    produtos.nome AS produto,
+    itens_pedido.quantidade,
+    itens_pedido.preco_unitario,
+    itens_pedido.quantidade * itens_pedido.preco_unitario
+        AS subtotal,
+    pedidos.total,
+    pedidos.status
+FROM pedidos
+JOIN clientes
+    ON pedidos.cliente_id = clientes.id
+JOIN itens_pedido
+    ON pedidos.id = itens_pedido.pedido_id
+JOIN produtos
+    ON itens_pedido.produto_id = produtos.id;
+	
+	SELECT
+    categorias.nome AS categoria,
+    produtos.nome AS produto
+FROM categorias
+LEFT JOIN produtos
+    ON categorias.id = produtos.categoria_id;
+	
+SELECT
+    categorias.nome AS categoria,
+    COUNT(produtos.id) AS quantidade_produtos
+FROM categorias
+LEFT JOIN produtos
+    ON categorias.id = produtos.categoria_id
+GROUP BY categorias.id, categorias.nome;
+</sql><sql name="SQL 4">UPDATE produtos
+SET preco = 199.90
+WHERE id = 1;
+
+UPDATE produtos
+SET estoque = 10
+WHERE id = 1;
+
+UPDATE produtos
+SET descricao = 'Obra artística para decoração.'
+WHERE id = 1;
+
+UPDATE clientes
+SET email = 'novoemail@example.com'
+WHERE id = 1;
+
+UPDATE pedidos
+SET status = 'Enviado'
+WHERE id = 1;</sql><sql name="SQL 5">DELETE FROM produtos
+WHERE id = 1;
+
+DELETE FROM categorias
+WHERE id = 1;
+
+DELETE FROM clientes
+WHERE id = 1;
+
+DELETE FROM pedidos
+WHERE id = 1;
+</sql><current_tab id="2"/></tab_sql></sqlb_project>
