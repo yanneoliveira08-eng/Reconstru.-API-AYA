@@ -219,41 +219,77 @@ JOIN produtos
 FROM categorias
 LEFT JOIN produtos
     ON categorias.id = produtos.categoria_id;
-	
-SELECT
-    categorias.nome AS categoria,
-    COUNT(produtos.id) AS quantidade_produtos
-FROM categorias
-LEFT JOIN produtos
-    ON categorias.id = produtos.categoria_id
+	
+
+SELECT
+
+    categorias.nome AS categoria,
+
+    COUNT(produtos.id) AS quantidade_produtos
+
+FROM categorias
+
+LEFT JOIN produtos
+
+    ON categorias.id = produtos.categoria_id
+
 GROUP BY categorias.id, categorias.nome;
-</sql><sql name="SQL 4">UPDATE produtos
-SET preco = 199.90
-WHERE id = 1;
-
-UPDATE produtos
-SET estoque = 10
-WHERE id = 1;
-
-UPDATE produtos
-SET descricao = 'Obra artística para decoração.'
-WHERE id = 1;
-
-UPDATE clientes
-SET email = 'novoemail@example.com'
-WHERE id = 1;
-
-UPDATE pedidos
-SET status = 'Enviado'
-WHERE id = 1;</sql><sql name="SQL 5">DELETE FROM produtos
-WHERE id = 1;
-
-DELETE FROM categorias
-WHERE id = 1;
-
-DELETE FROM clientes
-WHERE id = 1;
-
-DELETE FROM pedidos
-WHERE id = 1;
+</sql><sql name="SQL 4">UPDATE produtos
+
+SET preco = 199.90
+
+WHERE id = 1;
+
+
+
+UPDATE produtos
+
+SET estoque = 10
+
+WHERE id = 1;
+
+
+
+UPDATE produtos
+
+SET descricao = 'Obra artística para decoração.'
+
+WHERE id = 1;
+
+
+
+UPDATE clientes
+
+SET email = 'novoemail@example.com'
+
+WHERE id = 1;
+
+
+
+UPDATE pedidos
+
+SET status = 'Enviado'
+
+WHERE id = 1;</sql><sql name="SQL 5">DELETE FROM produtos
+
+WHERE id = 1;
+
+
+
+DELETE FROM categorias
+
+WHERE id = 1;
+
+
+
+DELETE FROM clientes
+
+WHERE id = 1;
+
+
+
+DELETE FROM pedidos
+
+WHERE id = 1;
+
 </sql><current_tab id="2"/></tab_sql></sqlb_project>
