@@ -1,73 +1,106 @@
+
 <section class="container secao">
+
     <div class="titulo-secao">
         <span class="etiqueta">SUA SELEÇÃO</span>
         <h1>Meu carrinho</h1>
-        <p>Confira os produtos escolhidos antes de continuar.</p>
+        <p>Confira os produtos escolhidos antes de finalizar seu pedido.</p>
     </div>
 
-    <% if (itens.length === 0) { %>
-        <p>Seu carrinho está vazio.</p>
-        <a href="/produtos" class="botao">Explorar produtos</a>
+    <% if (!itens || itens.length === 0) { %>
+
+        <div class="text-center py-5">
+            <h2>Seu carrinho está vazio.</h2>
+
+            <p>Explore nossa loja e encontre algo especial.</p>
+
+            <a href="/produtos" class="botao">
+                Explorar produtos
+            </a>
+        </div>
+
     <% } else { %>
+
         <div class="lista-carrinho">
+
             <% itens.forEach(item => { %>
-                <article class="item-carrinho">
+
+                <article class="produto-card">
+
                     <img
                         src="<%= item.imagem || '/img/sem-imagem.png' %>"
                         alt="<%= item.nome %>"
+                        loading="lazy"
                     >
 
-                    <div>
+                    <div class="produto-info">
+
                         <h2><%= item.nome %></h2>
-                        <p>Quantidade: <%= item.quantidade %></p>
+
                         <p>
                             Preço unitário:
-                            <%= item.preco.toLocaleString('pt-BR', {
+                            <%= Number(item.preco).toLocaleString('pt-BR', {
                                 style: 'currency',
                                 currency: 'BRL'
                             }) %>
                         </p>
+
+                        <p>Quantidade: <%= item.quantidade %></p>
+
                         <strong>
                             Subtotal:
-                            <%= item.subtotal.toLocaleString('pt-BR', {
-                                style: 'currency',
-                                currency: 'BRL'
-                            }) %>
+                            <%= (Number(item.preco) * Number(item.quantidade))
+                                .toLocaleString('pt-BR', {
+                                    style: 'currency',
+                                    currency: 'BRL'
+                                }) %>
                         </strong>
 
                         <form
                             action="/carrinho/remover/<%= item.id %>"
                             method="POST"
                         >
-                            <button class="botao botao-perigo" type="submit">
-                                Remover
+                            <button type="submit">
+                                Remover produto
                             </button>
                         </form>
+
                     </div>
+
                 </article>
+
             <% }) %>
+
         </div>
 
-        <div class="resumo-carrinho">
+        <div class="resumo-carrinho mt-4">
+
             <h2>
                 Total:
-                <%= total.toLocaleString('pt-BR', {
+                <%= Number(total).toLocaleString('pt-BR', {
                     style: 'currency',
                     currency: 'BRL'
                 }) %>
             </h2>
 
             <form action="/pedidos/finalizar" method="POST">
-                <label for="cliente">Nome do cliente</label>
-                <input id="cliente" name="cliente" required maxlength="120">
-
-                <label for="email">E-mail</label>
-                <input id="email" name="email" type="email" required maxlength="254">
-
-                <button class="botao" type="submit">
+                <button type="submit" class="botao">
                     Finalizar pedido
                 </button>
             </form>
+
+            <form action="/carrinho/limpar" method="POST">
+                <button type="submit">
+                    Limpar carrinho
+                </button>
+            </form>
+
+            <a href="/produtos" class="botao botao-secundario">
+                Continuar comprando
+            </a>
+
         </div>
+
     <% } %>
+
 </section>

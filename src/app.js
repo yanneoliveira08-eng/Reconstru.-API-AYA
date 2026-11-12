@@ -10,41 +10,37 @@ const carrinhoRoutes = require('./routes/carrinhoRoutes');
 const pedidoRoutes = require('./routes/pedidoRoutes');
 const adminPedidoRoutes = require('./routes/adminPedidoRoutes');
 
-// Cria a aplicação Express
 const app = express();
 
-// Configura o EJS
+// Configuração do EJS
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '../views'));
 
 app.use(expressLayouts);
 app.set('layout', 'layouts/main');
 
-// Configura os dados recebidos
+// Recebimento de dados
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Configura as sessões
+// Sessões
 app.use(session({
     secret: process.env.SESSION_SECRET || 'atlas-das-artes-chave-local',
     resave: false,
     saveUninitialized: false
 }));
 
-// Disponibiliza arquivos estáticos
+// Arquivos públicos
 app.use(express.static(path.join(__dirname, '../public')));
 
-// Registra as rotas da aplicação
+// Rotas
 app.use('/api', apiRoutes);
 app.use('/carrinho', carrinhoRoutes);
 app.use('/pedidos', pedidoRoutes);
-
-// Rotas administrativas de pedidos
 app.use('/admin/pedidos', adminPedidoRoutes);
-
 app.use('/', webRoutes);
 
-// Trata páginas e endpoints inexistentes
+// Página não encontrada
 app.use((req, res) => {
     if (req.path.startsWith('/api/')) {
         return res.status(404).json({
@@ -58,7 +54,7 @@ app.use((req, res) => {
     });
 });
 
-// Trata erros internos
+// Tratamento de erros
 app.use((erro, req, res, next) => {
     console.error('Erro na aplicação:', erro.stack || erro);
 
@@ -77,14 +73,12 @@ app.use((erro, req, res, next) => {
     );
 });
 
-// Inicia o servidor apenas quando este arquivo é executado diretamente
+// Inicialização
 if (require.main === module) {
     const PORT = process.env.PORT || 3000;
 
     app.listen(PORT, () => {
-        console.log(
-            `Atlas das Artes disponível em http://localhost:${PORT}`
-        );
+        console.log(`Atlas das Artes disponível em http://localhost:${PORT}`);
     });
 }
 
