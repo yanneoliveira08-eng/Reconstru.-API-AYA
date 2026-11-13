@@ -1,8 +1,21 @@
+require('dotenv').config({
+    path: require('node:path').resolve(__dirname, '../.env')
+});
+
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const request = require('supertest');
 
 const app = require('../src/app');
+const agente = request.agent(app);
+
+test('login administrativo libera operações de gerenciamento da API', async () => {
+    const resposta = await agente.post('/admin/login').type('form').send({
+        usuario: process.env.ADMIN_USER,
+        senha: process.env.ADMIN_PASSWORD
+    });
+    assert.equal(resposta.status, 302);
+});
 
 test('GET /api/produtos deve retornar uma lista', async () => {
     const resposta = await request(app)
@@ -30,7 +43,7 @@ test('GET /api/produtos/999999 deve retornar 404', async () => {
 });
 
 test('POST /api/produtos deve rejeitar dados inválidos', async () => {
-    const resposta = await request(app)
+    const resposta = await agente
         .post('/api/produtos')
         .send({
             nome: '',
@@ -64,7 +77,7 @@ test('POST, PUT e DELETE devem executar o CRUD', async () => {
     };
 
     // Cadastrar produto
-    const cadastro = await request(app)
+    const cadastro = await agente
         .post('/api/produtos')
         .send(novoProduto);
 
@@ -81,7 +94,7 @@ test('POST, PUT e DELETE devem executar o CRUD', async () => {
     assert.equal(consulta.body.nome, novoProduto.nome);
 
     // Atualizar produto
-    const atualizacao = await request(app)
+    const atualizacao = await agente
         .put(`/api/produtos/${id}`)
         .send({
             ...novoProduto,
@@ -94,7 +107,7 @@ test('POST, PUT e DELETE devem executar o CRUD', async () => {
     assert.equal(atualizacao.body.preco, 30);
 
     // Excluir produto
-    const exclusao = await request(app)
+    const exclusao = await agente
         .delete(`/api/produtos/${id}`);
 
     assert.equal(exclusao.status, 200);

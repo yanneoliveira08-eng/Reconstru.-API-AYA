@@ -83,11 +83,15 @@
                 }) %>
             </h2>
 
-            <form action="/pedidos/finalizar" method="POST">
-                <button type="submit" class="botao">
-                    Finalizar pedido
-                </button>
-            </form>
+            <% if (cliente) { %>
+                <form action="/pedidos/finalizar" method="POST">
+                    <button type="submit" class="botao">Finalizar pedido</button>
+                </form>
+            <% } else { %>
+                <p>Para concluir a compra, entre na sua conta ou crie uma.</p>
+                <a class="botao" href="/cliente/login?proxima=%2Fcarrinho">Entrar para finalizar</a>
+                <a href="/cliente/cadastro">Criar conta</a>
+            <% } %>
 
             <form action="/carrinho/limpar" method="POST">
                 <button type="submit">

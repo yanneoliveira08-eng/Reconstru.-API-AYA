@@ -1,0 +1,15 @@
+<section class="container secao">
+    <div class="titulo-secao">
+        <span class="etiqueta">ÁREA RESTRITA</span>
+        <h1>Login administrativo</h1>
+        <p>Acesse o painel de gerenciamento da Atlas das Artes.</p>
+    </div>
+    <% if (erro) { %><p class="mensagem-erro" role="alert"><%= erro %></p><% } %>
+    <form action="/admin/login" method="POST" class="formulario">
+        <label for="usuario">Usuário</label>
+        <input id="usuario" name="usuario" autocomplete="username" required>
+        <label for="senha">Senha</label>
+        <input id="senha" name="senha" type="password" autocomplete="current-password" required>
+        <button class="botao" type="submit">Entrar no painel</button>
+    </form>
+</section>

@@ -1,6 +1,10 @@
+const path = require('path');
+
+require('dotenv').config({
+    path: path.resolve(__dirname, '../.env')
+});
 
 const express = require('express');
-const path = require('path');
 const expressLayouts = require('express-ejs-layouts');
 const session = require('express-session');
 
@@ -9,6 +13,7 @@ const apiRoutes = require('./routes/apiRoutes');
 const carrinhoRoutes = require('./routes/carrinhoRoutes');
 const pedidoRoutes = require('./routes/pedidoRoutes');
 const adminPedidoRoutes = require('./routes/adminPedidoRoutes');
+const clienteRoutes = require('./routes/clienteRoutes');
 
 const app = express();
 
@@ -25,10 +30,18 @@ app.use(express.json());
 
 // Sessões
 app.use(session({
-    secret: process.env.SESSION_SECRET || 'atlas-das-artes-chave-local',
+    name: 'atlas.sid',
+    secret: process.env.SESSION_SECRET || 'desenvolvimento-troque-esta-chave-antes-de-publicar',
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    cookie: { httpOnly: true, sameSite: 'lax', secure: process.env.NODE_ENV === 'production', maxAge: 1000 * 60 * 60 * 8 }
 }));
+
+app.use((req, res, next) => {
+    res.locals.cliente = req.session.cliente || null;
+    res.locals.administrador = Boolean(req.session.administrador);
+    next();
+});
 
 // Arquivos públicos
 app.use(express.static(path.join(__dirname, '../public')));
@@ -38,6 +51,7 @@ app.use('/api', apiRoutes);
 app.use('/carrinho', carrinhoRoutes);
 app.use('/pedidos', pedidoRoutes);
 app.use('/admin/pedidos', adminPedidoRoutes);
+app.use('/cliente', clienteRoutes);
 app.use('/', webRoutes);
 
 // Página não encontrada

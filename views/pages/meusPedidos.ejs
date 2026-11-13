@@ -1,0 +1,28 @@
+<section class="container secao">
+    <div class="titulo-secao">
+        <span class="etiqueta">SUA CONTA</span>
+        <h1>Meus pedidos</h1>
+        <p>Acompanhe suas compras realizadas na Atlas das Artes.</p>
+    </div>
+    <% if (!pedidos.length) { %>
+        <p>Você ainda não realizou nenhum pedido.</p>
+        <a href="/produtos" class="botao">Explorar catálogo</a>
+    <% } else { %>
+        <div class="tabela-container">
+            <table>
+                <thead><tr><th>Pedido</th><th>Data</th><th>Total</th><th>Status</th><th></th></tr></thead>
+                <tbody>
+                    <% pedidos.forEach(pedido => { %>
+                        <tr>
+                            <td>#<%= pedido.id %></td>
+                            <td><%= pedido.data_pedido %></td>
+                            <td><%= Number(pedido.total).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></td>
+                            <td><%= pedido.status %></td>
+                            <td><a href="/pedidos/<%= pedido.id %>">Ver detalhes</a></td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    <% } %>
+</section>

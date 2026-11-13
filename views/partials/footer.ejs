@@ -1,7 +1,27 @@
 <footer class="rodape">
-    <div class="container">
+  <div class="container">
+    <div class="rodape-grid">
+      <div>
         <h3>Atlas das Artes</h3>
-        <p>Arte, cultura e criatividade em um só lugar.</p>
-        <p>&copy; <%= new Date().getFullYear() %> Atlas das Artes.</p>
+        <p>Um espaço para descobrir obras, valorizar o feito à mão e cultivar novas ideias.</p>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <div class="rodape-links">
+          <a href="/">Página inicial</a>
+          <a href="/produtos">Nosso catálogo</a>
+          <a href="/carrinho">Meu carrinho</a>
+        </div>
+      </div>
+      <div>
+        <h4>Sua conta</h4>
+        <div class="rodape-links">
+          <a href="/cliente/login">Entrar</a>
+          <a href="/cliente/cadastro">Criar conta</a>
+          <a href="/cliente/pedidos">Acompanhar pedidos</a>
+        </div>
+      </div>
     </div>
+    <div class="rodape-copy">&copy; <%= new Date().getFullYear() %> Atlas das Artes. Feito para quem acredita no poder da criatividade.</div>
+  </div>
 </footer>

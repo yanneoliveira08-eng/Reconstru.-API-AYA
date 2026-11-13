@@ -34,6 +34,66 @@ db.exec(`
     );
 `);
 
+
+// Tabela de clientes
+db.exec(`
+    CREATE TABLE IF NOT EXISTS clientes (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nome TEXT NOT NULL,
+        email TEXT NOT NULL UNIQUE,
+        senha_hash TEXT NOT NULL,
+        telefone TEXT,
+        endereco TEXT,
+        criado_em TEXT DEFAULT CURRENT_TIMESTAMP
+    );
+`);
+
+// Tabela de administradores
+db.exec(`
+    CREATE TABLE IF NOT EXISTS administradores (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nome TEXT NOT NULL,
+        usuario TEXT NOT NULL UNIQUE,
+        senha_hash TEXT NOT NULL,
+        criado_em TEXT DEFAULT CURRENT_TIMESTAMP
+    );
+`);
+
+// Tabela de pedidos
+db.exec(`
+    CREATE TABLE IF NOT EXISTS pedidos (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        cliente_id INTEGER NOT NULL,
+        data_pedido TEXT DEFAULT CURRENT_TIMESTAMP,
+        total REAL NOT NULL CHECK (total >= 0),
+        status TEXT NOT NULL DEFAULT 'Pendente',
+
+        FOREIGN KEY (cliente_id)
+            REFERENCES clientes(id)
+            ON DELETE RESTRICT
+    );
+`);
+
+// Tabela de itens dos pedidos
+db.exec(`
+    CREATE TABLE IF NOT EXISTS itens_pedido (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        pedido_id INTEGER NOT NULL,
+        produto_id INTEGER NOT NULL,
+        quantidade INTEGER NOT NULL CHECK (quantidade > 0),
+        preco_unitario REAL NOT NULL CHECK (preco_unitario >= 0),
+
+        FOREIGN KEY (pedido_id)
+            REFERENCES pedidos(id)
+            ON DELETE CASCADE,
+
+        FOREIGN KEY (produto_id)
+            REFERENCES produtos(id)
+            ON DELETE RESTRICT
+    );
+`);
+
+
 const inserirCategoria = db.prepare(`
     INSERT OR IGNORE INTO categorias (nome, descricao)
     VALUES (?, ?)

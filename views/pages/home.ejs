@@ -1,96 +1,71 @@
-
 <section class="hero">
-    <div class="container hero-content">
-        <span class="etiqueta">UM UNIVERSO DE CRIATIVIDADE</span>
-
-        <h1>A arte transforma o mundo.</h1>
-
-        <p>
-            Descubra obras, culturas e materiais para dar vida
-            às suas ideias. Encontre inspiração em cada detalhe.
-        </p>
-
-        <a href="/produtos" class="botao">Explorar catálogo</a>
+  <div class="container hero-content">
+    <div class="hero-copy">
+      <span class="etiqueta">Um universo de criatividade</span>
+      <h1>A arte dá forma ao que nos inspira.</h1>
+      <p>Descubra peças autorais, objetos cheios de personalidade e materiais para transformar suas ideias em expressão.</p>
+      <div class="hero-actions">
+        <a href="/produtos" class="botao">Explorar coleção</a>
+        <a href="#colecoes" class="botao botao-secundario">Conhecer a loja</a>
+      </div>
+      <div class="hero-note">Arte · Cultura · Design · Criatividade</div>
     </div>
+  </div>
+</section>
+
+<section class="container secao" id="colecoes">
+  <div class="titulo-secao">
+    <span class="etiqueta">Encontre sua inspiração</span>
+    <h2>Explore por universo</h2>
+    <p>Uma seleção pensada para quem aprecia a beleza dos detalhes e a força da criação.</p>
+  </div>
+  <div class="categorias">
+    <a class="categoria-tile" style="--tile-image:url('https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=700')" href="/produtos"><span>01 · Arte visual</span><strong>Quadros & pinturas</strong></a>
+    <a class="categoria-tile" style="--tile-image:url('https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=700')" href="/produtos"><span>02 · Feito à mão</span><strong>Artesanato</strong></a>
+    <a class="categoria-tile" style="--tile-image:url('https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=700')" href="/produtos"><span>03 · Palavras</span><strong>Livros & poesia</strong></a>
+    <a class="categoria-tile" style="--tile-image:url('https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=700')" href="/produtos"><span>04 · Crie você</span><strong>Materiais artísticos</strong></a>
+  </div>
 </section>
 
 <section class="container secao">
+  <div class="cabecalho-linha">
     <div class="titulo-secao">
-        <span class="etiqueta">NOSSA COLEÇÃO</span>
-        <h2>Descubra novas expressões artísticas</h2>
-        <p>Peças e materiais para apreciar, colecionar e criar.</p>
+      <span class="etiqueta">Curadoria Atlas</span>
+      <h2>Peças para se apaixonar</h2>
+      <p>Conheça alguns destaques da nossa coleção.</p>
     </div>
-
-    <div class="grade-produtos">
-        <% produtos.forEach(produto => { %>
-            <article class="produto-card">
-                <a href="/produtos/<%= produto.id %>">
-                    <img
-                        src="<%= produto.imagem || '/img/sem-imagem.png' %>"
-                        alt="<%= produto.nome %>"
-                        loading="lazy"
-                    >
-                </a>
-
-                <div class="produto-info">
-                    <span class="categoria">
-                        <%= produto.categoria %>
-                    </span>
-
-                    <h3><%= produto.nome %></h3>
-                    <p><%= produto.descricao %></p>
-
-                    <strong>
-                        <%= produto.preco.toLocaleString('pt-BR', {
-                            style: 'currency',
-                            currency: 'BRL'
-                        }) %>
-                    </strong>
-
-                    <a
-                        class="botao botao-secundario"
-                        href="/produtos/<%= produto.id %>"
-                    >
-                        Ver detalhes
-                    </a>
-
-                    <!-- Botão para adicionar o produto ao carrinho -->
-                    <% if (produto.estoque > 0) { %>
-                     <form
-    action="/carrinho/adicionar/<%= produto.id %>"
-    method="POST"
->
-    <input
-        type="hidden"
-        name="quantidade"
-        value="1"
-    >
-
-    <button type="submit">
-        🛒 Adicionar ao carrinho
-    </button>
-</form>
-                    <% } %>
-                </div>
-            </article>
-        <% }) %>
-    </div>
-
-    <div class="centralizar">
-        <a href="/produtos" class="botao">Ver todos os produtos</a>
-    </div>
+    <a class="link-texto" href="/produtos">Ver catálogo completo ↗</a>
+  </div>
+  <div class="grade-produtos">
+    <% produtos.forEach(produto => { %>
+      <article class="produto-card">
+        <a class="produto-imagem" href="/produtos/<%= produto.id %>">
+          <img src="<%= produto.imagem || '/img/sem-imagem.png' %>" alt="<%= produto.nome %>" loading="lazy">
+        </a>
+        <div class="produto-info">
+          <span class="categoria"><%= produto.categoria %></span>
+          <h3><%= produto.nome %></h3>
+          <p><%= produto.descricao %></p>
+          <strong><%= Number(produto.preco).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></strong>
+          <a class="botao botao-secundario" href="/produtos/<%= produto.id %>">Conhecer peça</a>
+          <% if (produto.estoque > 0) { %>
+            <form action="/carrinho/adicionar/<%= produto.id %>" method="POST">
+              <input type="hidden" name="quantidade" value="1">
+              <button type="submit">Adicionar ao carrinho</button>
+            </form>
+          <% } %>
+        </div>
+      </article>
+    <% }) %>
+  </div>
+  <div class="centralizar"><a href="/produtos" class="botao">Descobrir todos os produtos</a></div>
 </section>
 
 <section class="faixa">
-    <div class="container">
-        <span class="etiqueta">CRIE SEM LIMITES</span>
-        <h2>Sua próxima ideia começa aqui.</h2>
-
-        <p>
-            Tintas, pincéis, telas, argila e ferramentas para
-            transformar a imaginação em arte.
-        </p>
-
-        <a href="/produtos" class="botao">Encontrar materiais</a>
-    </div>
+  <div class="container">
+    <span class="etiqueta">Sua criatividade merece espaço</span>
+    <h2>Inspire-se. Experimente. Crie.</h2>
+    <p>Encontre materiais, referências e objetos que tornam cada ambiente e cada projeto mais especiais.</p>
+    <a href="/produtos" class="botao">Encontre sua próxima inspiração</a>
+  </div>
 </section>

@@ -1,13 +1,25 @@
+<div class="aviso-topo">Curadoria criativa · Arte, cultura e inspiração para o seu espaço</div>
 <header class="topo">
-    <div class="container nav">
-        <a href="/" class="logo">Atlas <span>das Artes</span></a>
-
-        <nav>
-            <a href="/">Início</a>
-            <a href="/produtos">Catálogo</a>
-            <a href="/admin">Administração</a>
-            <a href="/carrinho">Carrinho</a>
-        </nav>
-    </div>
+  <div class="container nav">
+    <a href="/" class="logo">Atlas <span>das Artes</span></a>
+    <nav class="nav-links" aria-label="Navegação principal">
+      <a href="/">Início</a>
+      <a href="/produtos">Catálogo</a>
+      <a href="/carrinho">Carrinho</a>
+      <% if (cliente) { %>
+        <span>Olá, <%= cliente.nome %></span>
+        <a href="/cliente/pedidos">Meus pedidos</a>
+        <form action="/cliente/logout" method="POST" class="form-nav"><button type="submit">Sair</button></form>
+      <% } else { %>
+        <a href="/cliente/login">Entrar</a>
+        <a href="/cliente/cadastro" class="link-destaque">Criar conta</a>
+      <% } %>
+      <% if (administrador) { %>
+        <a href="/admin">Painel</a>
+        <form action="/admin/logout" method="POST" class="form-nav"><button type="submit">Sair do admin</button></form>
+      <% } else { %>
+        <a href="/admin/login">Administração</a>
+      <% } %>
+    </nav>
+  </div>
 </header>
-

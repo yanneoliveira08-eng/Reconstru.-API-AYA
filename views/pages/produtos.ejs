@@ -1,149 +1,51 @@
-
 <section class="container secao">
-
-    <div class="titulo-secao">
-        <span class="etiqueta">EXPLORE A LOJA</span>
-        <h1>Nosso catálogo</h1>
-        <p>Encontre obras e materiais para sua jornada criativa.</p>
-    </div>
-
-    <div class="barra-pesquisa">
-        <label for="pesquisa">Pesquisar produtos</label>
-
-        <input
-            type="search"
-            id="pesquisa"
-            placeholder="Ex.: quadro, livro, pincel..."
-        >
-    </div>
-
-    <div class="grade-produtos">
-
-        <% if (produtos && produtos.length > 0) { %>
-
-            <% produtos.forEach(produto => { %>
-
-                <article
-                    class="produto-card item-pesquisa"
-                    data-nome="<%= produto.nome.toLowerCase() %>"
-                    data-categoria="<%= produto.categoria.toLowerCase() %>"
-                >
-
-                    <a href="/produtos/<%= produto.id %>">
-
-                        <img
-                            src="<%= produto.imagem || '/img/sem-imagem.png' %>"
-                            alt="<%= produto.nome %>"
-                            loading="lazy"
-                        >
-
-                    </a>
-
-                    <div class="produto-info">
-
-                        <span class="categoria">
-                            <%= produto.categoria %>
-                        </span>
-
-                        <h2><%= produto.nome %></h2>
-
-                        <p><%= produto.descricao %></p>
-
-                        <strong>
-                            <%= Number(produto.preco).toLocaleString('pt-BR', {
-                                style: 'currency',
-                                currency: 'BRL'
-                            }) %>
-                        </strong>
-
-                        <p>
-                            <%= produto.estoque > 0
-                                ? 'Disponível em estoque'
-                                : 'Produto indisponível' %>
-                        </p>
-
-                        <a
-                            class="botao botao-secundario"
-                            href="/produtos/<%= produto.id %>"
-                        >
-                            Ver detalhes
-                        </a>
-
-                        <% if (produto.estoque > 0) { %>
-
-                            <form
-                                action="/carrinho/adicionar/<%= produto.id %>"
-                                method="POST"
-                            >
-
-                                <input
-                                    type="hidden"
-                                    name="quantidade"
-                                    value="1"
-                                >
-
-                                <button type="submit">
-                                    🛒 Adicionar ao carrinho
-                                </button>
-
-                            </form>
-
-                        <% } else { %>
-
-                            <button type="button" disabled>
-                                Produto esgotado
-                            </button>
-
-                        <% } %>
-
-                    </div>
-
-                </article>
-
-            <% }) %>
-
-        <% } else { %>
-
-            <p>Nenhum produto cadastrado no momento.</p>
-
-        <% } %>
-
-    </div>
-
-    <p id="sem-resultados" hidden>
-        Nenhum produto encontrado para essa pesquisa.
-    </p>
-
+  <div class="titulo-secao">
+    <span class="etiqueta">A coleção completa</span>
+    <h1>Arte para todos os olhares.</h1>
+    <p>Explore nossa seleção de obras, objetos e materiais criativos. Encontre algo que converse com seu jeito de ver o mundo.</p>
+  </div>
+  <div class="barra-pesquisa">
+    <label for="pesquisa">O que você está procurando?</label>
+    <input type="search" id="pesquisa" placeholder="Busque por quadro, cerâmica, livro, pincel...">
+  </div>
+  <div class="grade-produtos">
+    <% if (produtos && produtos.length > 0) { %>
+      <% produtos.forEach(produto => { %>
+        <article class="produto-card item-pesquisa" data-nome="<%= produto.nome.toLowerCase() %>" data-categoria="<%= produto.categoria.toLowerCase() %>">
+          <a class="produto-imagem" href="/produtos/<%= produto.id %>"><img src="<%= produto.imagem || '/img/sem-imagem.png' %>" alt="<%= produto.nome %>" loading="lazy"></a>
+          <div class="produto-info">
+            <span class="categoria"><%= produto.categoria %></span>
+            <h2><%= produto.nome %></h2>
+            <p><%= produto.descricao %></p>
+            <strong><%= Number(produto.preco).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></strong>
+            <p><%= produto.estoque > 0 ? 'Disponível em estoque' : 'Produto indisponível' %></p>
+            <a class="botao botao-secundario" href="/produtos/<%= produto.id %>">Ver detalhes</a>
+            <% if (produto.estoque > 0) { %>
+              <form action="/carrinho/adicionar/<%= produto.id %>" method="POST"><input type="hidden" name="quantidade" value="1"><button type="submit">Adicionar ao carrinho</button></form>
+            <% } else { %>
+              <button type="button" disabled>Produto esgotado</button>
+            <% } %>
+          </div>
+        </article>
+      <% }) %>
+    <% } else { %>
+      <p>Nenhum produto cadastrado no momento.</p>
+    <% } %>
+  </div>
+  <p id="sem-resultados" hidden>Nenhum produto encontrado para essa pesquisa.</p>
 </section>
-
 <script>
-    const pesquisa = document.getElementById('pesquisa');
-    const produtos = document.querySelectorAll('.item-pesquisa');
-    const semResultados = document.getElementById('sem-resultados');
-
-    pesquisa.addEventListener('input', function () {
-
-        const termo = pesquisa.value.toLowerCase().trim();
-        let encontrados = 0;
-
-        produtos.forEach(produto => {
-
-            const nome = produto.dataset.nome;
-            const categoria = produto.dataset.categoria;
-
-            const corresponde =
-                nome.includes(termo) ||
-                categoria.includes(termo);
-
-            produto.style.display = corresponde ? '' : 'none';
-
-            if (corresponde) {
-                encontrados++;
-            }
-
-        });
-
-        semResultados.hidden = encontrados > 0;
-
+  const pesquisa = document.getElementById('pesquisa');
+  const cards = document.querySelectorAll('.item-pesquisa');
+  const semResultados = document.getElementById('sem-resultados');
+  pesquisa.addEventListener('input', function () {
+    const termo = pesquisa.value.toLowerCase().trim();
+    let encontrados = 0;
+    cards.forEach(card => {
+      const corresponde = card.dataset.nome.includes(termo) || card.dataset.categoria.includes(termo);
+      card.style.display = corresponde ? '' : 'none';
+      if (corresponde) encontrados++;
     });
+    semResultados.hidden = encontrados > 0;
+  });
 </script>

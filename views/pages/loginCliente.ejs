@@ -1,0 +1,17 @@
+<section class="container secao">
+    <div class="titulo-secao">
+        <span class="etiqueta">BEM-VINDO DE VOLTA</span>
+        <h1>Entrar na sua conta</h1>
+        <p>Entre para continuar sua compra e acompanhar seus pedidos.</p>
+    </div>
+    <% if (erro) { %><p class="mensagem-erro" role="alert"><%= erro %></p><% } %>
+    <form action="/cliente/login" method="POST" class="formulario">
+        <input type="hidden" name="proxima" value="<%= proxima %>">
+        <label for="email">E-mail</label>
+        <input id="email" name="email" type="email" autocomplete="email" required>
+        <label for="senha">Senha</label>
+        <input id="senha" name="senha" type="password" autocomplete="current-password" required>
+        <button class="botao" type="submit">Entrar</button>
+    </form>
+    <p>Ainda não tem conta? <a href="/cliente/cadastro">Cadastre-se</a></p>
+</section>
